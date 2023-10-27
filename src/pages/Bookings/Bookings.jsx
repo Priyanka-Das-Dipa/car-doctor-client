@@ -13,6 +13,42 @@ const Bookings = () => {
         setBookings(data);
       });
   }, []);
+
+  const handleDelete = id =>{
+    const proceed = confirm('Are You Sure?')
+    if(proceed){
+      fetch(`http://localhost:5000/bookings/${id}`, {
+        method: 'DELETE',
+        
+      })
+      .then(res => res.json())
+      .then(data => {
+        if(data.deletedCount > 0){
+          alert('Deleted Successfully!')
+          const remaining = bookings.filter(booking => booking._id !== id)
+          setBookings(remaining)
+        }
+        console.log(data)
+      })
+    }
+  }
+
+  // 
+  const handleConfirm = id => {
+    fetch(`http://localhost:5000/bookings/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'content-type' : 'application/json'
+      },
+      body: JSON.stringify({status : 'confirm'})
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log(data)
+    })
+  }
+
+
   return (
     <div className="min-h-screen">
       <h2 className="text-3xl font-medium text-center">
@@ -24,20 +60,20 @@ const Bookings = () => {
           <thead>
             <tr className="text-lg font-bold">
               <th>
-                <label>
-                  <input type="checkbox" className="checkbox" />
-                </label>
+                
               </th>
-              <th>Service </th>
+              <th>Image </th>
               <th>Service Name</th>
               <th>Date</th>
               <th>Price</th>
-              <th></th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
             {
-                bookings.map(booking => <BookingTable key={booking._id} booking={booking}></BookingTable>)
+                bookings.map(booking => <BookingTable key={booking._id} booking={booking}
+                  handleDelete = {handleDelete} handleConfirm={handleConfirm}
+                ></BookingTable>)
             }
           </tbody>
           

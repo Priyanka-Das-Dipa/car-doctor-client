@@ -1,14 +1,17 @@
-import { useEffect } from "react";
-import { useState } from "react";
+// import { useEffect } from "react";
+// import { useState } from "react";
+import useServices from "../../../hooks/useServices";
 import ServiceCard from "./ServiceCard";
 
 const Services = () => {
-    const [services, setService] = useState([])
-    useEffect(()=>{
-        fetch('http://localhost:5000/services')
-        .then(res => res.json())
-        .then(data => setService(data))
-    }, [])
+    const services = useServices();
+
+    // const [services, setService] = useState([])
+    // useEffect(()=>{
+    //     fetch('http://localhost:5000/services')
+    //     .then(res => res.json())
+    //     .then(data => setService(data))
+    // }, [])
     return (
         <div className="mb-10">
             <div className="text-center space-y-3 mb-10">
@@ -18,7 +21,7 @@ const Services = () => {
             </div>
             <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10">
                 {
-                    services.map(service => <ServiceCard key={service._id} service={service}></ServiceCard>)
+                    services?.map(service => <ServiceCard key={service._id} service={service}></ServiceCard>)
                 }
             </div>
             
